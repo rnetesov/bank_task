@@ -31,8 +31,8 @@
     <nav class="top-nav">
         <ul>
             <li><a href="#">Кредитные карты</a></li>
-            <li><a href="#">Вклады</a></li>
-            <li><a href="#" class="active">Дебитовые карты</a></li>
+            <li><a href="#" class="active">Вклады</a></li>
+            <li><a href="#">Дебитовые карты</a></li>
             <li><a href="#">Страхование</a></li>
             <li><a href="#">Друзья</a></li>
             <li><a href="#">Интернет-банк</a></li>

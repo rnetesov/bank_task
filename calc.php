@@ -2,19 +2,31 @@
 
 session_start();
 
-function getInvestmentTermInDays(string $depositOpeningDay, int $years): int
+function getInvestmentTermInMonths(string $depositOpeningDay, int $years): int
 {
-	$start = strtotime($depositOpeningDay);
-	$end = strtotime('+' . $years . 'years', $start);
-	
-	$delta = $end - $start;
-	return $delta / 86400;
+	$start = new DateTime($depositOpeningDay);
+	$end = (clone $start)->add(new DateInterval('P' . $years . 'Y'));
+	$interval = $start->diff($end);
+	return $interval->m + 12 * $interval->y;
 }
 
 function calcDepositWithoutAddInvest($summ, $percent, $time)
 {
 	$months = $time * 12;
 	return $summ * pow((1 + $percent / 100 / 12), $months);
+}
+
+function calcDepositWithAddInvest($summ, $summAdd, $percent, $date, $time)
+{
+	$months = getInvestmentTermInMonths($date, $time);
+	
+	for ($i = 0; $i < $months; $i++) {
+		$total = $summ * (1 + $percent / 100 / 12);
+		$summ = $total;
+		$summ += $summAdd;
+	}
+	
+	return $total;
 }
 
 function validateData($date, $summ, $timeInYears, $selection, $summAdd)
@@ -53,6 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	$percent = 10.0;
 	
 	$errors = validateData($date, $summ, $timeInYears, $selection, $summ_add);
+	$deposit_amount = 0.0;
 	
 	if (empty($errors)) {
 		switch ($selection) {
@@ -60,10 +73,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$deposit_amount = calcDepositWithoutAddInvest($summ, $percent, $timeInYears);
 				break;
 			case 'yes' :
-				$deposit_amount = 0;
+				$deposit_amount = calcDepositWithAddInvest($summ, $summ_add, $percent, $date, $timeInYears);
 				break;
 		}
-		$result = number_format($deposit_amount, 2, ',', ' ');
+		
+		$result = number_format($deposit_amount, 0, ',', ' ');
+		
 		echo json_encode([
 			'type' => 'ok',
 			'content' => $result,

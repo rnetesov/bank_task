@@ -18,7 +18,7 @@
     <header>
         <div class="logo">
             <a href="#">
-                <img src="css/images/logo.png" alt="">
+                <img src="img/logo.png" alt="">
             </a>
         </div>
         <div class="phones">

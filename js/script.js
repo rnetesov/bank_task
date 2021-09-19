@@ -51,8 +51,8 @@ function validateCalcData(summ, summAdd, choise, time, date) {
         isValid = false;
     }
 
-    if (summVal > 3000000) {
-        addAlert("Сумма вклада не может превышить 3 000 000 руб.");
+    if (summVal > 3000000 || summVal < 1000) {
+        addAlert("Сумма вклада может быть от 1000 до 3 000 000 руб.");
         summ.addClass('error');
         isValid = false;
     }
@@ -70,8 +70,8 @@ function validateCalcData(summ, summAdd, choise, time, date) {
             isValid = false;
         }
 
-        if (summAddVal > 3000000) {
-            addAlert("Сумма пополнения вклада не может превышить 3 000 000 руб.");
+        if (summAddVal > 3000000 || summAddVal < 1000) {
+            addAlert("Сумма пополнения вклада может быть от 1000 до 3 000 000 руб.");
             summAdd.addClass('error');
             isValid = false;
         }
@@ -151,7 +151,8 @@ $(function () {
                 success: function (data) {
                     let result = JSON.parse(data);
                     if (result.type === 'ok') {
-                        addResultBlock(result.content);;
+                        addResultBlock(result.content);
+                        ;
                     }
                 },
             });

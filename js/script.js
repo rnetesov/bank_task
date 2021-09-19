@@ -126,6 +126,18 @@ $(function () {
 
     $("#summ").val($("#slider1").slider("value"));
 
+    $("#calculator input[name=summ], #calculator input[name=summadd]").each(function () {
+        $(this).focus(function () {
+            let value = $(this).val().replace(/\s/g, '');
+            $(this).val(value);
+        });
+
+        $(this).blur(function () {
+            let value = numberFormat($(this).val(), ' ');
+            $(this).val(value);
+        });
+    });
+
     $("#calculator").submit(function (evt) {
         evt.preventDefault();
 

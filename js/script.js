@@ -127,6 +127,8 @@ $(function () {
     $("#summ").val($("#slider1").slider("value"));
 
     $("#calculator input[name=summ], #calculator input[name=summadd]").each(function () {
+        $(this).val(numberFormat($(this).val()));
+
         $(this).focus(function () {
             let value = $(this).val().replace(/\s/g, '');
             $(this).val(value);

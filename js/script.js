@@ -14,8 +14,8 @@ function clearAlerts() {
 }
 
 function validateCalcData(summ, summAdd, choise, time, date) {
-    let summVal = +summ.val();
-    let summAddVal = +summAdd.val();
+    let summVal = +summ.val().replace(/\s+/g, '');
+    let summAddVal = +summAdd.val().replace(/\s+/g, '');
     let timeVal = time.val();
     let choiseVal = choise.val();
     let dateVal = date.val();
@@ -95,6 +95,10 @@ function clearErrors(summ, summAdd, time, date) {
     date.removeClass('error');
 }
 
+function numberFormat(number, thousandSeparator = ' ') {
+    return String(number).replace(/(\d)(?=(\d{3})+([^\d]|$))/g, '$1' + thousandSeparator);
+}
+
 $(function () {
     $("#datepicker").datepicker({
         dateFormat: "dd-mm-yy"
@@ -106,7 +110,7 @@ $(function () {
         min: 1000,
         max: 3000000,
         slide: function (event, ui) {
-            $("#summ").val(ui.value);
+            $("#summ").val(numberFormat(ui.value));
         }
     });
 
@@ -116,7 +120,7 @@ $(function () {
         max: 3000000,
         animate: true,
         slide: function (event, ui) {
-            $("#summ_add").val(ui.value);
+            $("#summ_add").val(numberFormat(ui.value));
         }
     });
 
@@ -138,8 +142,8 @@ $(function () {
         if (validateCalcData(summ, summAdd, choiseAdd, time, date)) {
             let data = {
                 date: date.val(),
-                summ: summ.val(),
-                summadd: summAdd.val(),
+                summ: summ.val().replace(/\s/g, ''),
+                summadd: summAdd.val().replace(/\s/g, ''),
                 time: time.val(),
                 selection: choiseAdd.val(),
             }
@@ -152,7 +156,6 @@ $(function () {
                     let result = JSON.parse(data);
                     if (result.type === 'ok') {
                         addResultBlock(result.content);
-                        ;
                     }
                 },
             });
